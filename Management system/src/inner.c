@@ -1,9 +1,9 @@
 #include "inner.h"
 #include "menu.h"
 
-#define host "XXX"
-#define user "XXX"
-#define passwd "XXX"
+#define host "localhost"
+#define user "root"
+#define passwd "q"
 #define port 0
 #define unix_socket NULL
 #define client_flag 0
@@ -113,7 +113,7 @@ void function3() {
 
 	if (strcmp(userInput, "name") || strcmp(userInput, "Name")) {
 
-		MYSQL * connection = estConnection(host, user, passwd, "XXX", port, unix_socket,  client_flag);
+		MYSQL * connection = estConnection(host, user, passwd, "Apartment", port, unix_socket,  client_flag);
 
 		printf("\nEnter Full Name: ");
 		fgets(fullName, maxSize, stdin);
