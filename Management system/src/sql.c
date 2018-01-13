@@ -93,13 +93,11 @@ void executeSQL(MYSQL *mysql, const char *stmt_str)
 void print(MYSQL *mysql, char * searchTerm) {
 
 	char *token;
-	int db = 0;
 	int counter = 0;
 	char * personID = (char*)malloc(255 * sizeof(char));
 	char * firstName = (char*)malloc(255 * sizeof(char));
 	char * lastName= (char*)malloc(255 * sizeof(char));
 	char * searchSQL = (char*)malloc(255 * sizeof(char));
-	char * searchID = (char*)malloc(255 * sizeof(char));
 
 	token = strtok(searchTerm, " ");	
 
@@ -246,6 +244,12 @@ void print(MYSQL *mysql, char * searchTerm) {
 		}
 		printf("\n");
 	}
+
+	free(firstName);
+	free(lastName);
+	free(personID);
+	free(searchSQL);
+	mysql_free_result(result);
 }
 
 
