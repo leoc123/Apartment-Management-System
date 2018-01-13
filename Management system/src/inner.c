@@ -113,7 +113,7 @@ void function3() {
 
 	if (strcmp(userInput, "name") || strcmp(userInput, "Name")) {
 
-		MYSQL * connection = estConnection(host, user, passwd, "Apartment", port, unix_socket,  client_flag);
+		MYSQL * connection = estConnection(host, user, passwd, "XXX", port, unix_socket,  client_flag);
 
 		printf("\nEnter Full Name: ");
 		fgets(fullName, maxSize, stdin);
