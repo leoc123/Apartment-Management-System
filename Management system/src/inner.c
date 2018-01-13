@@ -1,9 +1,9 @@
 #include "inner.h"
 #include "menu.h"
 
-#define host "localhost"
-#define user "root"
-#define passwd "q"
+#define host "XXX"
+#define user "XXX"
+#define passwd "XXX"
 #define port 0
 #define unix_socket NULL
 #define client_flag 0
