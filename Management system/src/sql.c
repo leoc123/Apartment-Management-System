@@ -90,7 +90,7 @@ void executeSQL(MYSQL *mysql, const char *stmt_str)
 	}
 }
 
-void print(MYSQL *mysql, char * searchTerm) {
+void print(MYSQL *mysql, char * searchTerm, int mode) {
 
 	char *token;
 	int counter = 0;
@@ -98,6 +98,9 @@ void print(MYSQL *mysql, char * searchTerm) {
 	char * firstName = (char*)malloc(255 * sizeof(char));
 	char * lastName= (char*)malloc(255 * sizeof(char));
 	char * searchSQL = (char*)malloc(255 * sizeof(char));
+if (mode == 0)
+{
+
 
 	token = strtok(searchTerm, " ");	
 
@@ -138,7 +141,7 @@ void print(MYSQL *mysql, char * searchTerm) {
 	
 	if (counter <= 1)
 	{
-		printf("Couldn't Find Anything with the search terms: '%s %s'",firstName, lastName);
+		printf("Couldn't Find Anything with the name: '%s %s'",firstName, lastName);
 		return;
 	}
 
@@ -250,6 +253,146 @@ void print(MYSQL *mysql, char * searchTerm) {
 	free(personID);
 	free(searchSQL);
 	mysql_free_result(result);
+}
+
+else if (mode == 1)
+{
+	printf("\n");
+	sprintf(searchSQL, "SELECT * FROM apartment.tenants WHERE Suite LIKE '%%%s%%'", searchTerm);
+
+	executeSQL(mysql, searchSQL);
+
+	MYSQL_RES *result = mysql_store_result(mysql);
+	MYSQL_FIELD *fields = mysql_fetch_fields(result);
+	MYSQL_ROW row;
+	int rows = mysql_num_fields(result);
+
+	printf("-----Tenant(s)-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("%s: %s\n", fields[i].name, row[i]);
+			counter++;
+		}
+		printf("\n");
+	}
+
+	
+	if (counter <= 1)
+	{
+		printf("Couldn't Find Anything with the Suite Number: '%s'",searchTerm);
+		return;
+	}
+
+	else 
+	{
+		printf("Enter the person ID: ");
+		fgets(personID, maxSize, stdin);
+		personID[strlen(personID)-1] = '\0';
+	}
+
+	sprintf(searchSQL, "SELECT * FROM apartment.EmergencyContact WHERE personID LIKE '%%%s%%'", personID);
+	executeSQL(mysql, searchSQL);
+	result = mysql_store_result(mysql);
+	fields = mysql_fetch_fields(result);
+
+	rows = mysql_num_fields(result);
+
+	printf("-----Emergency Contact-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("%s: %s\n", fields[i].name, row[i]);
+		}
+		printf("\n");
+	}
+
+	sprintf(searchSQL, "SELECT * FROM apartment.OccupiantsInfo WHERE personID LIKE '%%%s%%'", personID);
+	executeSQL(mysql, searchSQL);
+	result = mysql_store_result(mysql);
+	fields = mysql_fetch_fields(result);
+
+	rows = mysql_num_fields(result);
+
+	printf("-----Occupiants Info-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("%s: %s\n", fields[i].name, row[i]);
+		}
+		printf("\n");
+	}
+
+	sprintf(searchSQL, "SELECT * FROM apartment.ParkingSpot WHERE personID LIKE '%%%s%%'", personID);
+	executeSQL(mysql, searchSQL);
+	result = mysql_store_result(mysql);
+	fields = mysql_fetch_fields(result);
+
+	rows = mysql_num_fields(result);
+
+	printf("-----Parking Spot-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("%s: %s\n", fields[i].name, row[i]);
+		}
+		printf("\n");
+	}
+
+	sprintf(searchSQL, "SELECT * FROM apartment.PreviousLandLords WHERE personID LIKE '%%%s%%'", personID);
+	executeSQL(mysql, searchSQL);
+	result = mysql_store_result(mysql);
+	fields = mysql_fetch_fields(result);
+
+	rows = mysql_num_fields(result);
+
+	printf("-----Previous Land Lords-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("%s: %s\n", fields[i].name, row[i]);
+		}
+		printf("\n");
+	}
+
+	sprintf(searchSQL, "SELECT * FROM apartment.Reference WHERE personID LIKE '%%%s%%'", personID);
+	executeSQL(mysql, searchSQL);
+	result = mysql_store_result(mysql);
+	fields = mysql_fetch_fields(result);
+
+	rows = mysql_num_fields(result);
+
+	printf("-----Reference(s)-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("%s: %s\n", fields[i].name, row[i]);
+		}
+		printf("\n");
+	}
+
+	sprintf(searchSQL, "SELECT * FROM apartment.Notes WHERE personID LIKE '%%%s%%'", personID);
+	executeSQL(mysql, searchSQL);
+	result = mysql_store_result(mysql);
+	fields = mysql_fetch_fields(result);
+
+	rows = mysql_num_fields(result);
+
+	printf("-----Notes-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("%s: %s\n", fields[i].name, row[i]);
+		}
+		printf("\n");
+	}
+
+	free(firstName);
+	free(lastName);
+	free(personID);
+	free(searchSQL);
+	mysql_free_result(result);
+}
 }
 
 

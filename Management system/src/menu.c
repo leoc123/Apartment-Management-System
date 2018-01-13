@@ -49,7 +49,7 @@ void menu()
 		}
 
 		else if (strcmp(userInput, "4") == 0) {
-
+			function4();
 
 		}
 

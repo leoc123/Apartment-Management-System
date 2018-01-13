@@ -7,4 +7,4 @@ MYSQL * estConnection(const char *host, const char *user, const char *passwd, co
 void createDB(MYSQL *mysql, const char *stmt_str);
 void printDatabase(MYSQL *mysql);
 void executeSQL(MYSQL *mysql, const char *stmt_str);
-void print(MYSQL *mysql, char *searchTerm);
+void print(MYSQL *mysql, char *searchTerm, int mode);

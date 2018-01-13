@@ -111,7 +111,7 @@ void function3() {
 		}
 	}
 
-	if (strcmp(userInput, "name") || strcmp(userInput, "Name")) {
+	if ((strcmp(userInput, "name") == 0) || (strcmp(userInput, "Name")) == 0) {
 
 		MYSQL * connection = estConnection(host, user, passwd, "Apartment", port, unix_socket,  client_flag);
 
@@ -119,11 +119,28 @@ void function3() {
 		fgets(fullName, maxSize, stdin);
 		fullName[strlen(fullName)-1] = '\0';
 
-		print(connection, fullName);
+		print(connection, fullName, 0);
+	}
+
+	else if ((strcmp(userInput, "suite") == 0) || (strcmp(userInput, "Suite")) == 0) {
+
+		MYSQL * connection = estConnection(host, user, passwd, "Apartment", port, unix_socket,  client_flag);
+
+		printf("\nEnter Suite Number: ");
+		fgets(fullName, maxSize, stdin);
+		fullName[strlen(fullName)-1] = '\0';
+
+		print(connection, fullName, 1);
 	}
 
 	free(userInput);
 	free(fullName);
+}
+
+void function4() {
+
+	
+
 }
 	
 
