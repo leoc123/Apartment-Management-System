@@ -5,7 +5,6 @@
 #define SQL3 "SELECT * FROM apartment.Notes"
 #define SQL4 "SELECT * FROM apartment.OccupiantsInfo"
 #define SQL5 "SELECT * FROM apartment.ParkingSpot"
-#define SQL6 "SELECT * FROM apartment.PreviousLandLords"
 #define SQL7 "SELECT * FROM apartment.Reference"
 
 MYSQL * estConnection(const char *host, const char *user, const char *passwd, const char *db, unsigned int port, const char *unix_socket, unsigned long client_flag)
@@ -192,22 +191,6 @@ if (mode == 0)
 	rows = mysql_num_fields(result);
 
 	printf("-----Parking Spot-----\n");
-	while((row = mysql_fetch_row(result))){
-		for (int i = 0; i < rows; i++)
-		{
-			printf("%s: %s\n", fields[i].name, row[i]);
-		}
-		printf("\n");
-	}
-
-	sprintf(searchSQL, "SELECT * FROM apartment.PreviousLandLords WHERE personID LIKE '%%%s%%'", personID);
-	executeSQL(mysql, searchSQL);
-	result = mysql_store_result(mysql);
-	fields = mysql_fetch_fields(result);
-
-	rows = mysql_num_fields(result);
-
-	printf("-----Previous Land Lords-----\n");
 	while((row = mysql_fetch_row(result))){
 		for (int i = 0; i < rows; i++)
 		{

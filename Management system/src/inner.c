@@ -6,16 +6,10 @@
 #define passwd "q"
 #define port 0
 #define unix_socket NULL
-#define client_flag 0
+#define client_flag CLIENT_MULTI_STATEMENTS
 #define createSQL "CREATE DATABASE "
-#define SQL1 "CREATE TABLE Tenants (PersonID int AUTO_INCREMENT, Suite varchar(255), FirstName varchar(255), LastName varchar(255), buildingAddress varchar(255), rentalAmount double, OccupyAmount int, currentlyLiving int, PRIMARY KEY (PersonID));"
-#define SQL2 "CREATE TABLE OccupiantsInfo (PersonID int, FirstName varchar(255), LastName varchar(255), Age int, PhoneNumber varchar(255));"
-#define SQL3 "CREATE TABLE previousLandLords (PersonID int, CurrAddress varchar(255), CurrCity varchar(255), CurrlandlordPhoneNumber varchar(255), Currduration int, PrevAddress varchar(255), PrevCity varchar(255), PrevlandlordPhoneNumber varchar(255), Prevduration int, CurrHusbandEmployer varchar(255), CurrHusbandEmployerPhoneNumber varchar(255), CurrHusbandDuration int, PrevHusbandEmployer varchar(255), PrevHusbandEmployerPhoneNumber varchar(255), PrevHusbandDuration int, HusbandOccupation varchar(255), HusbandIncomeMonthly double, HusbandBank varchar(255), CurrWifeEmployer varchar(255), CurrWifeEmployerPhoneNumber varchar(255), CurrWifeDuration int, PrevWifeEmployer varchar(255), PrevWifeEmpliyerPhoneNumber varchar(255), PrevWifeDuration int, WifeOccupation varchar(255), WifeIncomeMonthly double, WifeBank varchar(255));"
-#define SQL4 "CREATE TABLE Reference (PersonID int, ReferenceName varchar(255), PhoneNumber varchar(255));"
-#define SQL5 "CREATE TABLE EmergencyContact (PersonID int, EmergName varchar(255), PhoneNumber varchar(255));"
-#define SQL6 "CREATE TABLE parkingSpot (PersonID int, MakeOfCar varchar(255), ColourOfCar varchar(255), Year int, LIC varchar(255), HusbandDriverLIC varchar(255), WifeDriverLIC varchar(255), Name varchar(255), Amount double);"
-#define SQL7 "CREATE TABLE Notes (PersonID int, Notes varchar(255));"
-#define SQL8 "SELECT * FROM "
+#define initateSQL "CREATE TABLE Tenants (`Person ID` int AUTO_INCREMENT, Suite varchar(255), `First Name` varchar(255), `Last Name` varchar(255), `Building Address` varchar(255), `Rental Amount of Unit` double, `Number of Occupants` int, `Currently Living Status`  varchar(255), PRIMARY KEY (`Person ID`)); CREATE TABLE `Occupiants Info` (`Person ID` int, `First Name` varchar(255), `Last Name` varchar(255), Age int, `Phone Number` varchar(255), `Current Home Address` varchar(255), `Current Home City` varchar(255), `Current Home LandLord's Phone Number` varchar(255), `Current Home Duration` int, `Previous Home Address` varchar(255), `Previous Home City` varchar(255), `Previous Home LandLord's Phone Number` varchar(255), `Previous Home Duration` int, `Current Employer` varchar(255), `Current Employer's PhoneNumber` varchar(255), `Current Job Duration` int, `Previous Employer` varchar(255), `Previous Employer's Phone Number` varchar(255), `Previous Job Duration` int, Occupation varchar(255), `Income Monthly` double, `Income Yearly` double, Bank varchar(255), Relationship varchar(255)); CREATE TABLE Reference (`Person ID` int, `Reference's Name` varchar(255), `Reference's Phone Number` varchar(255), `Reference's Occupation` varchar(255)); CREATE TABLE `Emergency Contacts` (`Person ID` int, `Emergency Name` varchar(255), `Phone Number` varchar(255)); CREATE TABLE `Parking Spots` (`Person ID` int, `Make Of Car` varchar(255), Colour varchar(255), Year int, `LIC of Car` varchar(255), `Driver's LIC` varchar(255), Amount double); CREATE TABLE Notes (`Person ID` int, Notes varchar(255));"
+#define SQL "SELECT * FROM "
 
 void function1() {
 
@@ -37,7 +31,6 @@ void function1() {
 
 void function2() {
 
-	int counter = 1;
 	MYSQL * connection = estConnection(host, user, passwd, NULL, port, unix_socket,  client_flag);
 	char * userInput = (char*)malloc(maxSize * sizeof(char));
 
@@ -49,44 +42,13 @@ void function2() {
 	fgets(userInput, maxSize, stdin);
 	userInput[strlen(userInput)-1] = '\0';
 
-	while(counter != 8) {
+
 	connection = estConnection(host, user, passwd, userInput, port, unix_socket,  client_flag);
 	
-	if (counter == 1)
-	{
-		 executeSQL(connection, SQL1);
-	}
+	
+		 executeSQL(connection, initateSQL);
+	
 
-	else if (counter == 2)
-	{
-		executeSQL(connection, SQL2);
-	}
-
-	else if (counter == 3)
-	{
-		executeSQL(connection, SQL3);
-	}
-
-	else if (counter == 4)
-	{
-		executeSQL(connection, SQL4);
-	}
-
-	else if (counter == 5)
-	{
-		executeSQL(connection, SQL5);
-	}
-
-	else if (counter == 6)
-	{
-		executeSQL(connection, SQL6);
-	}
-
-	else if (counter == 7){
-		executeSQL(connection, SQL7);
-	}
-	counter++;
-}
 	free(userInput);
 
 	}
