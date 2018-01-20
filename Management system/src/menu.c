@@ -12,13 +12,12 @@ void menu()
 	userInput = (char*)malloc(maxSize * sizeof(char));
 	
 	printf("\nMySQL Client Version %s\n", mysql_get_client_info());
-	printf("\n1. Create new DB\n");
-	printf("2. Init Table(s)\n");
-	printf("3. Print\n");
-	printf("4. Add\n");
-	printf("5. Edit\n");
-	printf("6, Delete\n");
-	printf("7. Exit\n");
+	printf("\n1. Setup\n");
+	printf("2. Print\n");
+	printf("3. Add\n");
+	printf("4. Edit\n");
+	printf("5, Delete\n");
+	printf("6. Exit\n");
 	printf("Enter Option: ");
 
 	fgets(userInput, maxSize, stdin);
@@ -41,6 +40,7 @@ void menu()
 
 		else if (strcmp(userInput, "2") == 0) {
 			function2();
+
 		}
 
 		else if (strcmp(userInput, "3") == 0) {
@@ -49,21 +49,16 @@ void menu()
 		}
 
 		else if (strcmp(userInput, "4") == 0) {
-			function4();
+
 
 		}
 
 		else if (strcmp(userInput, "5") == 0) {
-
-
-		}
-
-		else if (strcmp(userInput, "6") == 0) {
 			
 
 		}
 
-		else if (strcmp(userInput, "7") == 0) {
+		else if (strcmp(userInput, "6") == 0) {
 				lock = 1;
 
 		}

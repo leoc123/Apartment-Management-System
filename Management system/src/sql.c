@@ -37,43 +37,6 @@ MYSQL * estConnection(const char *host, const char *user, const char *passwd, co
 
 }
 
-void createDB(MYSQL *mysql, const char *stmt_str)
-{
-	if (mysql_query(mysql, stmt_str) != 0)
-	{
-		printf("%s\n", mysql_error(mysql));
-		mysql_close(mysql);
-	}
-
-	else
-	{
-		printf("\nDatabase Created!\n");
-		mysql_close(mysql);
-	}
-}
-
-void printDatabase(MYSQL *mysql)
-{
-
-	MYSQL_RES *result = mysql_list_dbs(mysql, "%");
-	MYSQL_ROW row;
-
-	printf("\n");
-	if (result == NULL) {
-
-		printf("%s\n", mysql_error(mysql));
-			mysql_close(mysql);
-			exit(1);
-	}
-
-	else
-	{
-		while ((row = mysql_fetch_row(result))) {
-		printf("%s\n", row[0]);
-	}
-	}
-}
-
 
 void executeSQL(MYSQL *mysql, const char *stmt_str)
 {
@@ -99,8 +62,6 @@ void print(MYSQL *mysql, char * searchTerm, int mode) {
 	char * searchSQL = (char*)malloc(255 * sizeof(char));
 if (mode == 0)
 {
-
-
 	token = strtok(searchTerm, " ");	
 
 	while (token != NULL)
@@ -118,7 +79,7 @@ if (mode == 0)
 		token = strtok(NULL, " ");
 	}
 	printf("\n");
-	sprintf(searchSQL, "SELECT * FROM apartment.tenants WHERE firstName LIKE '%%%s%%' AND lastName LIKE '%%%s%%'", firstName, lastName);
+	sprintf(searchSQL, "SELECT * FROM apartment.tenants WHERE `First Name` LIKE '%%%s%%' AND `Last Name` LIKE '%%%s%%'", firstName, lastName);
 
 	executeSQL(mysql, searchSQL);
 
@@ -149,9 +110,10 @@ if (mode == 0)
 		printf("Enter the person ID: ");
 		fgets(personID, maxSize, stdin);
 		personID[strlen(personID)-1] = '\0';
+		printf("\n");
 	}
 
-	sprintf(searchSQL, "SELECT * FROM apartment.EmergencyContact WHERE personID LIKE '%%%s%%'", personID);
+	sprintf(searchSQL, "SELECT * FROM apartment.`Emergency Contacts` WHERE `Person ID` LIKE '%%%s%%'", personID);
 	executeSQL(mysql, searchSQL);
 	result = mysql_store_result(mysql);
 	fields = mysql_fetch_fields(result);
@@ -167,7 +129,7 @@ if (mode == 0)
 		printf("\n");
 	}
 
-	sprintf(searchSQL, "SELECT * FROM apartment.OccupiantsInfo WHERE personID LIKE '%%%s%%'", personID);
+	sprintf(searchSQL, "SELECT * FROM apartment.`Occupiants Info` WHERE `Person ID` LIKE '%%%s%%'", personID);
 	executeSQL(mysql, searchSQL);
 	result = mysql_store_result(mysql);
 	fields = mysql_fetch_fields(result);
@@ -183,7 +145,7 @@ if (mode == 0)
 		printf("\n");
 	}
 
-	sprintf(searchSQL, "SELECT * FROM apartment.ParkingSpot WHERE personID LIKE '%%%s%%'", personID);
+	sprintf(searchSQL, "SELECT * FROM apartment.`Parking Spots` WHERE `Person ID` LIKE '%%%s%%'", personID);
 	executeSQL(mysql, searchSQL);
 	result = mysql_store_result(mysql);
 	fields = mysql_fetch_fields(result);
@@ -199,7 +161,7 @@ if (mode == 0)
 		printf("\n");
 	}
 
-	sprintf(searchSQL, "SELECT * FROM apartment.Reference WHERE personID LIKE '%%%s%%'", personID);
+	sprintf(searchSQL, "SELECT * FROM apartment.`Reference` WHERE `Person ID` LIKE '%%%s%%'", personID);
 	executeSQL(mysql, searchSQL);
 	result = mysql_store_result(mysql);
 	fields = mysql_fetch_fields(result);
@@ -215,7 +177,7 @@ if (mode == 0)
 		printf("\n");
 	}
 
-	sprintf(searchSQL, "SELECT * FROM apartment.Notes WHERE personID LIKE '%%%s%%'", personID);
+	sprintf(searchSQL, "SELECT * FROM apartment.Notes WHERE `Person ID` LIKE '%%%s%%'", personID);
 	executeSQL(mysql, searchSQL);
 	result = mysql_store_result(mysql);
 	fields = mysql_fetch_fields(result);
@@ -272,9 +234,10 @@ else if (mode == 1)
 		printf("Enter the person ID: ");
 		fgets(personID, maxSize, stdin);
 		personID[strlen(personID)-1] = '\0';
+		printf("\n");
 	}
 
-	sprintf(searchSQL, "SELECT * FROM apartment.EmergencyContact WHERE personID LIKE '%%%s%%'", personID);
+	sprintf(searchSQL, "SELECT * FROM apartment.`Emergency Contacts` WHERE `Person ID` LIKE '%%%s%%'", personID);
 	executeSQL(mysql, searchSQL);
 	result = mysql_store_result(mysql);
 	fields = mysql_fetch_fields(result);
@@ -290,7 +253,7 @@ else if (mode == 1)
 		printf("\n");
 	}
 
-	sprintf(searchSQL, "SELECT * FROM apartment.OccupiantsInfo WHERE personID LIKE '%%%s%%'", personID);
+	sprintf(searchSQL, "SELECT * FROM apartment.`Occupiants Info` WHERE `Person ID` LIKE '%%%s%%'", personID);
 	executeSQL(mysql, searchSQL);
 	result = mysql_store_result(mysql);
 	fields = mysql_fetch_fields(result);
@@ -306,7 +269,7 @@ else if (mode == 1)
 		printf("\n");
 	}
 
-	sprintf(searchSQL, "SELECT * FROM apartment.ParkingSpot WHERE personID LIKE '%%%s%%'", personID);
+	sprintf(searchSQL, "SELECT * FROM apartment.`Parking Spots` WHERE `Person ID` LIKE '%%%s%%'", personID);
 	executeSQL(mysql, searchSQL);
 	result = mysql_store_result(mysql);
 	fields = mysql_fetch_fields(result);
@@ -322,23 +285,7 @@ else if (mode == 1)
 		printf("\n");
 	}
 
-	sprintf(searchSQL, "SELECT * FROM apartment.PreviousLandLords WHERE personID LIKE '%%%s%%'", personID);
-	executeSQL(mysql, searchSQL);
-	result = mysql_store_result(mysql);
-	fields = mysql_fetch_fields(result);
-
-	rows = mysql_num_fields(result);
-
-	printf("-----Previous Land Lords-----\n");
-	while((row = mysql_fetch_row(result))){
-		for (int i = 0; i < rows; i++)
-		{
-			printf("%s: %s\n", fields[i].name, row[i]);
-		}
-		printf("\n");
-	}
-
-	sprintf(searchSQL, "SELECT * FROM apartment.Reference WHERE personID LIKE '%%%s%%'", personID);
+	sprintf(searchSQL, "SELECT * FROM apartment.Reference WHERE `Person ID` LIKE '%%%s%%'", personID);
 	executeSQL(mysql, searchSQL);
 	result = mysql_store_result(mysql);
 	fields = mysql_fetch_fields(result);
@@ -354,7 +301,7 @@ else if (mode == 1)
 		printf("\n");
 	}
 
-	sprintf(searchSQL, "SELECT * FROM apartment.Notes WHERE personID LIKE '%%%s%%'", personID);
+	sprintf(searchSQL, "SELECT * FROM apartment.Notes WHERE `Person ID` LIKE '%%%s%%'", personID);
 	executeSQL(mysql, searchSQL);
 	result = mysql_store_result(mysql);
 	fields = mysql_fetch_fields(result);
