@@ -1,11 +1,5 @@
 #include "sql.h"
 #include "menu.h"
-#define SQL "SELECT * FROM apartment.Tenants"
-#define SQL2 "SELECT * FROM apartment.EmergencyContact"
-#define SQL3 "SELECT * FROM apartment.Notes"
-#define SQL4 "SELECT * FROM apartment.OccupiantsInfo"
-#define SQL5 "SELECT * FROM apartment.ParkingSpot"
-#define SQL7 "SELECT * FROM apartment.Reference"
 
 MYSQL * estConnection(const char *host, const char *user, const char *passwd, const char *db, unsigned int port, const char *unix_socket, unsigned long client_flag)
 {
