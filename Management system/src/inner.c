@@ -8,7 +8,7 @@
 #define unix_socket NULL
 #define client_flag CLIENT_MULTI_STATEMENTS
 #define createSQL "CREATE DATABASE "
-#define initateSQL "CREATE TABLE Tenants (`Person ID` int AUTO_INCREMENT, Suite varchar(255), `First Name` varchar(255), `Last Name` varchar(255), `Building Address` varchar(255), `Rental Amount of Unit($)` double, `Number of Occupants` int, `Occupied`  int, `Moved In` varchar(255), `Moved Out` varchar(255), `Rent Increase(%)` double, `Total Rent($)` double, `Own a parking Spot` int,  PRIMARY KEY (`Person ID`)); CREATE TABLE `Occupiants Info` (`Person ID` int, `First Name` varchar(255), `Last Name` varchar(255), Age int, `Phone Number` varchar(255), `Current Home Address` varchar(255), `Current Home City` varchar(255), `Current Home LandLord's Phone Number` varchar(255), `Current Home Duration` varchar(255), `Previous Home Address` varchar(255), `Previous Home City` varchar(255), `Previous Home LandLord's Phone Number` varchar(255), `Previous Home Duration` varchar(255), `Current Employer` varchar(255), `Current Employer's PhoneNumber` varchar(255), `Current Job Duration` varchar(255), `Previous Employer` varchar(255), `Previous Employer's Phone Number` varchar(255), `Previous Job Duration` varchar(255), Occupation varchar(255), `Income Monthly` double, `Income Yearly` double, Bank varchar(255), Relationship varchar(255)); CREATE TABLE Reference (`Person ID` int, `Reference's Name` varchar(255), `Reference's Phone Number` varchar(255), `Reference's Occupation` varchar(255)); CREATE TABLE `Emergency Contacts` (`Person ID` int, `Emergency Name` varchar(255), `Phone Number` varchar(255)); CREATE TABLE `Parking Spots` (`Person ID` int, `Make Of Car` varchar(255), Colour varchar(255), Year int, `LIC of Car` varchar(255), `Driver's LIC` varchar(255), Amount double); CREATE TABLE Notes (`Person ID` int, Notes varchar(255));"
+#define initateSQL "CREATE TABLE Tenants (`Person ID` int AUTO_INCREMENT, Suite varchar(255), `First Name` varchar(255), `Last Name` varchar(255), `Building Address` varchar(255), `Rental Amount of Unit($)` double, `Number of Occupants` int, `Occupied`  int, `Moved In` varchar(255), `Moved Out` varchar(255), `Rent Increase(%)` double, `Total Rent($)` double, `Own a parking Spot` int,  PRIMARY KEY (`Person ID`)); CREATE TABLE `Occupiants Info` (`Person ID` int, `First Name` varchar(255), `Last Name` varchar(255), Age int, `Phone Number` varchar(255), `Current Home Address` varchar(255), `Current Home City` varchar(255), `Current Home LandLord's Phone Number` varchar(255), `Current Home Duration` varchar(255), `Previous Home Address` varchar(255), `Previous Home City` varchar(255), `Previous Home LandLord's Phone Number` varchar(255), `Previous Home Duration` varchar(255), `Current Employer` varchar(255), `Current Employer's PhoneNumber` varchar(255), `Current Job Duration` varchar(255), `Previous Employer` varchar(255), `Previous Employer's Phone Number` varchar(255), `Previous Job Duration` varchar(255), Occupation varchar(255), `Income Monthly` double, `Income Yearly` double, Bank varchar(255), Relationship varchar(255)); CREATE TABLE Reference (`Person ID` int, `Reference's Name` varchar(255), `Reference's Phone Number` varchar(255), `Reference's Occupation` varchar(255)); CREATE TABLE `Emergency Contacts` (`Person ID` int, `Emergency Name` varchar(255), `Phone Number` varchar(255)); CREATE TABLE `Parking Spots` (`Person ID` int, `Make Of Car` varchar(255), Colour varchar(255), Year int, `LIC of Car` varchar(255), `Driver's LIC` varchar(255), Amount double, Name varchar(255)); CREATE TABLE Notes (`Person ID` int, Notes varchar(255));"
 #define SQL "SELECT * FROM "
 #define obtainingIDSQL "SELECT * FROM apartment.Tenants ORDER BY `Person ID` DESC LIMIT 1"
 
@@ -634,6 +634,169 @@ free(referencePhoneNumber);
 free(referenceJob);
 free(referenceSQL);
 }while(strcmp(repeat, "1") == 0);
+
+if (parkingSpotNumber == 1)
+{
+	do{
+	repeat = (char*)malloc(255 * sizeof(char));
+	char * makeOfCar = (char*)malloc(255 * sizeof(char));
+	char * colour = (char*)malloc(255 * sizeof(char));
+	char * year = (char*)malloc(255 * sizeof(char));
+	char * licOFCAR = (char*)malloc(255 * sizeof(char));
+	char * driveLIC = (char*)malloc(255 * sizeof(char));
+	char * name = (char*)malloc(255 * sizeof(char));
+	char * amount = (char*)malloc(255 * sizeof(char));
+	double amountNumber;
+	char * parkingSpotSQL = (char*)malloc(400 * sizeof(char));
+
+printf("\n---Parking Spots---");
+
+printf("\nEnter Name: ");
+fgets(name, 255, stdin);
+name[strlen(name)-1] = '\0';
+
+printf("\nEnter Make Of Car: ");
+fgets(makeOfCar, 255, stdin);
+makeOfCar[strlen(makeOfCar)-1] = '\0';
+
+printf("\nEnter Colour of Car: ");
+fgets(colour, 255, stdin);
+colour[strlen(colour)-1] = '\0';
+
+printf("\nEnter Year of Car: ");
+fgets(year, 255, stdin);
+year[strlen(year)-1] = '\0';
+
+printf("\nEnter License of Car: ");
+fgets(licOFCAR, 255, stdin);
+licOFCAR[strlen(licOFCAR)-1] = '\0';
+
+printf("\nEnter Driver License: ");
+fgets(driveLIC, 255, stdin);
+driveLIC[strlen(driveLIC)-1] = '\0';
+
+do{
+	
+	error = 0;
+	printf("\nEnter Amount: ");
+	fgets(amount, 255, stdin);
+	amount[strlen(amount)-1] = '\0';
+
+	if (strlen(amount) < 1)
+	{
+		error = 1;
+	}
+
+	else
+	{
+		for (int i = 0; i < strlen(amount); i++){
+		if ((isdigit(amount[i]) == 0) || (atoi(amount) == 0))
+		{
+				error = 1;
+				break;
+		}
+	}
+}
+	if (error == 1)
+	{
+		printf("\nInvalid Input");
+	}
+
+	else {
+		amountNumber = atof(amount);
+	}
+
+}while(error == 1);
+
+do {
+	error = 0;
+printf("\nInsert Another Entry?\n");
+printf("YES (1) OR NO (2): ");
+fgets(repeat, 255, stdin);
+repeat[strlen(repeat)-1] = '\0';
+
+if ((strlen(repeat) <= 0) || atoi(repeat) >= 3 || atoi(repeat) == 0 || strlen(repeat) > 1) {
+	error = 1;
+}
+
+else
+{
+	error = 0;
+	if (strcmp(repeat, "1") == 0) {
+		repeat = "1";
+	}
+
+	else
+	{
+		repeat = "0";
+	}
+}
+
+}while(error == 1);
+sprintf(parkingSpotSQL, "INSERT INTO `apartment`.`Parking Spots` (`Person ID`,`Make Of Car`, `Colour`, `Year`, `LIC of Car`, `Driver's LIC`, `Amount`, `Name`) VALUES ('%d','%s','%s','%s','%s','%s','%lf','%s');",personID,makeOfCar,colour,year,licOFCAR,driveLIC,amountNumber,name);
+executeSQL(connection, parkingSpotSQL);
+free(makeOfCar);
+free(colour);
+free(year);
+free(licOFCAR);
+free(driveLIC);
+free(amount);
+free(name);
+free(parkingSpotSQL);
+}while(strcmp(repeat, "1") == 0);
+}
+
+
+do{
+	repeat = (char*)malloc(255 * sizeof(char));
+	char * emergName = (char*)malloc(255 * sizeof(char));
+	char * emergPhoneNumber = (char*)malloc(255 * sizeof(char));
+	char * emergSQL = (char*)malloc(400 * sizeof(char));
+
+printf("\n---Emergency Contacts---");
+
+printf("\nEnter Emergency Name: ");
+fgets(emergName, 255, stdin);
+emergName[strlen(emergName)-1] = '\0';
+
+printf("\nEnter Emergency Phone Number: ");
+fgets(emergPhoneNumber, 255, stdin);
+emergPhoneNumber[strlen(emergPhoneNumber)-1] = '\0';
+
+do {
+	error = 0;
+printf("\nInsert Another Entry?\n");
+printf("YES (1) OR NO (2): ");
+fgets(repeat, 255, stdin);
+repeat[strlen(repeat)-1] = '\0';
+
+if ((strlen(repeat) <= 0) || atoi(repeat) >= 3 || atoi(repeat) == 0 || strlen(repeat) > 1) {
+	error = 1;
+}
+
+else
+{
+	error = 0;
+	if (strcmp(repeat, "1") == 0) {
+		repeat = "1";
+	}
+
+	else
+	{
+		repeat = "0";
+	}
+}
+
+}while(error == 1);
+sprintf(emergSQL, "INSERT INTO `apartment`.`Emergency Contacts` (`Person ID`,`Emergency Name`, `Phone Number`) VALUES ('%d','%s','%s');",personID,emergName,emergPhoneNumber);
+executeSQL(connection, emergSQL);
+free(emergName);
+free(emergPhoneNumber);
+free(emergSQL);
+}while(strcmp(repeat, "1") == 0);
+
+
+
 
 
 
