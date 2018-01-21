@@ -8,7 +8,7 @@
 #define unix_socket NULL
 #define client_flag CLIENT_MULTI_STATEMENTS
 #define createSQL "CREATE DATABASE "
-#define initateSQL "CREATE TABLE Tenants (`Person ID` int AUTO_INCREMENT, Suite varchar(255), `First Name` varchar(255), `Last Name` varchar(255), `Building Address` varchar(255), `Rental Amount of Unit($)` double, `Number of Occupants` int, `Occupied`  int, `Moved In` varchar(255), `Moved Out` varchar(255), `Rent Increase(%)` double, `Total Rent($)` double, `Own a parking Spot` int,  PRIMARY KEY (`Person ID`)); CREATE TABLE `Occupiants Info` (`Person ID` int, `First Name` varchar(255), `Last Name` varchar(255), Age int, `Phone Number` varchar(255), `Current Home Address` varchar(255), `Current Home City` varchar(255), `Current Home LandLord's Phone Number` varchar(255), `Current Home Duration` int, `Previous Home Address` varchar(255), `Previous Home City` varchar(255), `Previous Home LandLord's Phone Number` varchar(255), `Previous Home Duration` int, `Current Employer` varchar(255), `Current Employer's PhoneNumber` varchar(255), `Current Job Duration` int, `Previous Employer` varchar(255), `Previous Employer's Phone Number` varchar(255), `Previous Job Duration` int, Occupation varchar(255), `Income Monthly` double, `Income Yearly` double, Bank varchar(255), Relationship varchar(255)); CREATE TABLE Reference (`Person ID` int, `Reference's Name` varchar(255), `Reference's Phone Number` varchar(255), `Reference's Occupation` varchar(255)); CREATE TABLE `Emergency Contacts` (`Person ID` int, `Emergency Name` varchar(255), `Phone Number` varchar(255)); CREATE TABLE `Parking Spots` (`Person ID` int, `Make Of Car` varchar(255), Colour varchar(255), Year int, `LIC of Car` varchar(255), `Driver's LIC` varchar(255), Amount double); CREATE TABLE Notes (`Person ID` int, Notes varchar(255));"
+#define initateSQL "CREATE TABLE Tenants (`Person ID` int AUTO_INCREMENT, Suite varchar(255), `First Name` varchar(255), `Last Name` varchar(255), `Building Address` varchar(255), `Rental Amount of Unit($)` double, `Number of Occupants` int, `Occupied`  int, `Moved In` varchar(255), `Moved Out` varchar(255), `Rent Increase(%)` double, `Total Rent($)` double, `Own a parking Spot` int,  PRIMARY KEY (`Person ID`)); CREATE TABLE `Occupiants Info` (`Person ID` int, `First Name` varchar(255), `Last Name` varchar(255), Age int, `Phone Number` varchar(255), `Current Home Address` varchar(255), `Current Home City` varchar(255), `Current Home LandLord's Phone Number` varchar(255), `Current Home Duration` varchar(255), `Previous Home Address` varchar(255), `Previous Home City` varchar(255), `Previous Home LandLord's Phone Number` varchar(255), `Previous Home Duration` varchar(255), `Current Employer` varchar(255), `Current Employer's PhoneNumber` varchar(255), `Current Job Duration` varchar(255), `Previous Employer` varchar(255), `Previous Employer's Phone Number` varchar(255), `Previous Job Duration` varchar(255), Occupation varchar(255), `Income Monthly` double, `Income Yearly` double, Bank varchar(255), Relationship varchar(255)); CREATE TABLE Reference (`Person ID` int, `Reference's Name` varchar(255), `Reference's Phone Number` varchar(255), `Reference's Occupation` varchar(255)); CREATE TABLE `Emergency Contacts` (`Person ID` int, `Emergency Name` varchar(255), `Phone Number` varchar(255)); CREATE TABLE `Parking Spots` (`Person ID` int, `Make Of Car` varchar(255), Colour varchar(255), Year int, `LIC of Car` varchar(255), `Driver's LIC` varchar(255), Amount double); CREATE TABLE Notes (`Person ID` int, Notes varchar(255));"
 #define SQL "SELECT * FROM "
 #define obtainingIDSQL "SELECT * FROM apartment.Tenants ORDER BY `Person ID` DESC LIMIT 1"
 
@@ -92,13 +92,42 @@ void function3() {
 	int counter = 0;
 
 	char * suite = (char*)malloc(255 * sizeof(char));
-	int presonID;
+	int personID;
+	char * repeat = (char*)malloc(255 * sizeof(char));
 
 	char * firstName = (char*)malloc(255 * sizeof(char));
 	char * lastName = (char*)malloc(255 * sizeof(char));
 	char * buildingAddress = (char*)malloc(255 * sizeof(char));
 	char * injectionSQL = (char*)malloc(400 * sizeof(char));
+	char * occupantsSQL = (char*)malloc(1000 * sizeof(char));
 	char * movedIN = (char*)malloc(255 * sizeof(char));
+	char * phoneNumber = (char*)malloc(255 * sizeof(char));
+	char * currentHomeAddress = (char*)malloc(255 * sizeof(char));
+	char * currentHomeCity = (char*)malloc(255 * sizeof(char));
+	char * currentHomeLandLordPhoneNumber = (char*)malloc(255 * sizeof(char));
+	char * currentHomeDuration = (char*)malloc(255 * sizeof(char));
+	char * previousHomeAddress = (char*)malloc(255 * sizeof(char));
+	char * previousHomeCity = (char*)malloc(255 * sizeof(char));
+	char * previousHomeLandLordPhoneNumber = (char*)malloc(255 * sizeof(char));
+	char * previousHomeDuration = (char*)malloc(255 * sizeof(char));
+	char * currentEmployer = (char*)malloc(255 * sizeof(char));
+	char * currentEmployerPhoneNumber = (char*)malloc(255 * sizeof(char));
+	char * currentJobDuration = (char*)malloc(255 * sizeof(char));
+	char * previousEmployer = (char*)malloc(255 * sizeof(char));
+	char * previousEmployerPhoneNumber = (char*)malloc(255 * sizeof(char));
+	char * previousJobDuration = (char*)malloc(255 * sizeof(char));
+	char * job = (char*)malloc(255 * sizeof(char));
+	char * bank = (char*)malloc(255 * sizeof(char));
+	char * relationship = (char*)malloc(255 * sizeof(char));
+
+	char * incomeMonthly = (char*)malloc(255 * sizeof(char));
+	double incomeMonthlyNumber;
+
+	char * incomeYearly = (char*)malloc(255 * sizeof(char));
+	double incomeYearlyNumber;
+
+	char * age = (char*)malloc(255 * sizeof(char));
+	int ageNumber;
 
 	char * parkingSpot = (char*)malloc(255 *sizeof(char));
 	int parkingSpotNumber;
@@ -112,7 +141,9 @@ void function3() {
 	int occupantNumber;
 
 	char * firstName2 = (char*)malloc(255 * sizeof(char));
+	char * lastName2 = (char*)malloc(255 * sizeof(char));
 
+	printf("---Tenants---\n");
 	do{
 	
 	error = 0;
@@ -156,11 +187,6 @@ void function3() {
 	if (error == 1)
 	{
 		printf("\nInvalid Input\n");
-	}
-
-	else {
-
-		printf("%s", suite);
 	}
 
 }while(error == 1);
@@ -299,12 +325,226 @@ else
 
 }while(error == 1);
 
-
-
 sprintf(injectionSQL, "INSERT INTO `apartment`.`Tenants` (`Suite`, `First Name`, `Last Name`, `Building Address`, `Rental Amount of Unit($)`, `Number of Occupants`, `Occupied`, `Moved In`, `Own a parking Spot`) VALUES ('%s', '%s', '%s', '%s', '%lf', '%d', '%d', '%s', '%d');", suite, firstName, lastName, buildingAddress, rentAmountNumber, occupantNumber, CurrentlyLiving, movedIN, parkingSpotNumber);
 
-//executeSQL(connection, injectionSQL);
-//personID = obtainingID(connection, obtainingIDSQL);
+executeSQL(connection, injectionSQL);
+personID = obtainingID(connection, obtainingIDSQL);
+
+
+do{
+printf("\n---Occupiants Info---");
+printf("\nEnter First Name: ");
+fgets(firstName2, 255, stdin);
+firstName2[strlen(firstName2)-1] = '\0';
+
+printf("\nEnter Last Name: ");
+fgets(lastName2, 255, stdin);
+lastName2[strlen(lastName2)-1] = '\0';
+
+do{
+	
+	error = 0;
+	printf("\nEnter Age: ");
+	fgets(age, 255, stdin);
+	age[strlen(age)-1] = '\0';
+
+	if (strlen(age) < 1)
+	{
+		error = 1;
+	}
+
+	else
+	{
+		for (int i = 0; i < strlen(age); i++){
+		if ((isdigit(age[i]) == 0) || (atoi(age) == 0))
+		{
+				error = 1;
+				break;
+		}
+	}
+}
+	if (error == 1)
+	{
+		printf("\nInvalid Input");
+	}
+
+	else {
+		ageNumber = atoi(age);
+	}
+
+}while(error == 1);
+
+printf("\nEnter Phone Number (XXX)-(XXX)-(XXXX): ");
+fgets(phoneNumber, 255, stdin);
+phoneNumber[strlen(phoneNumber)-1] = '\0';
+
+printf("\nEnter Current Home Address: ");
+fgets(currentHomeAddress, 255, stdin);
+currentHomeAddress[strlen(currentHomeAddress)-1] = '\0';
+
+printf("\nEnter Current Home City: ");
+fgets(currentHomeCity, 255, stdin);
+currentHomeCity[strlen(currentHomeCity)-1] = '\0';
+
+printf("\nEnter Current Home LandLord's PhoneNumber (XXX)-(XXX)-(XXXX): ");
+fgets(currentHomeLandLordPhoneNumber, 255, stdin);
+currentHomeLandLordPhoneNumber[strlen(currentHomeLandLordPhoneNumber)-1] = '\0';
+
+printf("\nEnter Current Home Duration: ");
+fgets(currentHomeDuration, 255, stdin);
+currentHomeDuration[strlen(currentHomeDuration)-1] = '\0';
+
+printf("\nEnter Previous Home Address: ");
+fgets(previousHomeAddress, 255, stdin);
+previousHomeAddress[strlen(previousHomeAddress)-1] = '\0';
+
+printf("\nEnter Previous Home City: ");
+fgets(previousHomeCity, 255, stdin);
+previousHomeCity[strlen(previousHomeCity)-1] = '\0';
+
+printf("\nEnter Previous Home LandLord's Phone Number (XXX)-(XXX)-(XXXX): ");
+fgets(previousHomeLandLordPhoneNumber, 255, stdin);
+previousHomeLandLordPhoneNumber[strlen(previousHomeLandLordPhoneNumber)-1] = '\0';
+
+printf("\nEnter Previous Home Duration: ");
+fgets(previousHomeDuration, 255, stdin);
+previousHomeDuration[strlen(previousHomeDuration)-1] = '\0';
+
+printf("\nEnter Current Employer: ");
+fgets(currentEmployer, 255, stdin);
+currentEmployer[strlen(currentEmployer)-1] = '\0';
+
+printf("\nEnter Current Employer's Phone Number (XXX)-(XXX)-(XXXX): ");
+fgets(currentEmployerPhoneNumber, 255, stdin);
+currentEmployerPhoneNumber[strlen(currentEmployerPhoneNumber)-1] = '\0';
+
+printf("\nEnter Current Job Duration: ");
+fgets(currentJobDuration, 255, stdin);
+currentJobDuration[strlen(currentJobDuration)-1] = '\0';
+
+printf("\nEnter Previous Employer: ");
+fgets(previousEmployer, 255, stdin);
+previousEmployer[strlen(previousEmployer)-1] = '\0';
+
+printf("\nEnter Previous Employer's Phone Number (XXX)-(XXX)-(XXXX): ");
+fgets(previousEmployerPhoneNumber, 255, stdin);
+previousEmployerPhoneNumber[strlen(previousEmployerPhoneNumber)-1] = '\0';
+
+printf("\nEnter Previous Job Duration: ");
+fgets(previousJobDuration, 255, stdin);
+previousJobDuration[strlen(previousJobDuration)-1] = '\0';
+
+printf("\nEnter Occupation: ");
+fgets(job, 255, stdin);
+job[strlen(job)-1] = '\0';
+
+do{
+	
+	error = 0;
+	printf("\nEnter Monthly Income: ");
+	fgets(incomeMonthly, 255, stdin);
+	incomeMonthly[strlen(incomeMonthly)-1] = '\0';
+
+	if (strlen(incomeMonthly) < 1)
+	{
+		error = 1;
+	}
+
+	else
+	{
+		for (int i = 0; i < strlen(incomeMonthly); i++){
+		if ((isdigit(incomeMonthly[i]) == 0) || (atoi(incomeMonthly) == 0))
+		{
+				error = 1;
+				break;
+		}
+	}
+}
+	if (error == 1)
+	{
+		printf("\nInvalid Input");
+	}
+
+	else {
+		incomeMonthlyNumber = atof(incomeMonthly);
+	}
+
+}while(error == 1);
+
+do{
+	
+	error = 0;
+	printf("\nEnter Yearly Income: ");
+	fgets(incomeYearly, 255, stdin);
+	incomeYearly[strlen(incomeYearly)-1] = '\0';
+
+	if (strlen(incomeYearly) < 1)
+	{
+		error = 1;
+	}
+
+	else
+	{
+		for (int i = 0; i < strlen(incomeYearly); i++){
+		if ((isdigit(incomeYearly[i]) == 0) || (atoi(incomeYearly) == 0))
+		{
+				error = 1;
+				break;
+		}
+	}
+}
+	if (error == 1)
+	{
+		printf("\nInvalid Input");
+	}
+
+	else {
+		incomeYearlyNumber = atof(incomeYearly);
+	}
+
+}while(error == 1);
+
+printf("\nEnter Bank Branch: ");
+fgets(bank, 255, stdin);
+bank[strlen(bank)-1] = '\0';
+
+printf("\nEnter Relationship: ");
+fgets(relationship, 255, stdin);
+relationship[strlen(relationship)-1] = '\0';
+
+do {
+	error = 0;
+printf("\nInsert Another Entry?\n");
+printf("YES (1) OR NO (2): ");
+fgets(repeat, 255, stdin);
+repeat[strlen(repeat)-1] = '\0';
+
+if ((strlen(repeat) <= 0) || atoi(repeat) >= 3 || atoi(repeat) == 0 || strlen(repeat) > 1) {
+	error = 1;
+}
+
+else
+{
+	error = 0;
+	if (strcmp(repeat, "1") == 0) {
+		repeat = "1";
+	}
+
+	else
+	{
+		repeat = "0";
+	}
+}
+
+}while(error == 1);
+
+sprintf(occupantsSQL, "INSERT INTO `apartment`.`Occupiants Info` (`Person ID`,`First Name`, `Last Name`, `Age`, `Phone Number`, `Current Home Address`, `Current Home City`, `Current Home LandLord's Phone Number`, `Current Home Duration`, `Previous Home Address`, `Previous Home City`, `Previous Home LandLord's Phone Number`, `Previous Home Duration`, `Current Employer`, `Current Employer's PhoneNumber`, `Current Job Duration`, `Previous Employer`, `Previous Employer's Phone Number`, `Previous Job Duration`, `Occupation`, `Income Monthly`, `Income Yearly`, `Bank`, `Relationship`) VALUES ('%d','%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s', '%s', '%s', '%s', '%s', '%lf', '%lf', '%s','%s');",personID, firstName2,lastName2,ageNumber,phoneNumber,currentHomeAddress,currentHomeCity,currentHomeLandLordPhoneNumber,currentHomeDuration,previousHomeAddress,previousHomeCity,previousHomeLandLordPhoneNumber,previousHomeDuration,currentEmployer,currentEmployerPhoneNumber,currentJobDuration,previousEmployer,previousEmployerPhoneNumber,previousJobDuration,job,incomeMonthlyNumber,incomeYearlyNumber,bank,relationship);
+
+}while(strcmp(repeat, "1") == 0);
+
+executeSQL(connection,occupantsSQL);
+
+
 
 
 
