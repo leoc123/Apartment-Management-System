@@ -8,8 +8,9 @@
 #define unix_socket NULL
 #define client_flag CLIENT_MULTI_STATEMENTS
 #define createSQL "CREATE DATABASE "
-#define initateSQL "CREATE TABLE Tenants (`Person ID` int AUTO_INCREMENT, Suite varchar(255), `First Name` varchar(255), `Last Name` varchar(255), `Building Address` varchar(255), `Rental Amount of Unit($)` double, `Number of Occupants` int, `Occupied`  varchar(255), `Moved In` varchar(255), `Moved Out` varchar(255), `Rent Increase(%)` varchar(255), PRIMARY KEY (`Person ID`)); CREATE TABLE `Occupiants Info` (`Person ID` int, `First Name` varchar(255), `Last Name` varchar(255), Age int, `Phone Number` varchar(255), `Current Home Address` varchar(255), `Current Home City` varchar(255), `Current Home LandLord's Phone Number` varchar(255), `Current Home Duration` int, `Previous Home Address` varchar(255), `Previous Home City` varchar(255), `Previous Home LandLord's Phone Number` varchar(255), `Previous Home Duration` int, `Current Employer` varchar(255), `Current Employer's PhoneNumber` varchar(255), `Current Job Duration` int, `Previous Employer` varchar(255), `Previous Employer's Phone Number` varchar(255), `Previous Job Duration` int, Occupation varchar(255), `Income Monthly` double, `Income Yearly` double, Bank varchar(255), Relationship varchar(255)); CREATE TABLE Reference (`Person ID` int, `Reference's Name` varchar(255), `Reference's Phone Number` varchar(255), `Reference's Occupation` varchar(255)); CREATE TABLE `Emergency Contacts` (`Person ID` int, `Emergency Name` varchar(255), `Phone Number` varchar(255)); CREATE TABLE `Parking Spots` (`Person ID` int, `Make Of Car` varchar(255), Colour varchar(255), Year int, `LIC of Car` varchar(255), `Driver's LIC` varchar(255), Amount double); CREATE TABLE Notes (`Person ID` int, Notes varchar(255));"
+#define initateSQL "CREATE TABLE Tenants (`Person ID` int AUTO_INCREMENT, Suite varchar(maxSize), `First Name` varchar(maxSize), `Last Name` varchar(maxSize), `Building Address` varchar(maxSize), `Rental Amount of Unit($)` double, `Number of Occupants` int, `Occupied`  varchar(maxSize), `Moved In` varchar(maxSize), `Moved Out` varchar(maxSize), `Rent Increase(%)` varchar(maxSize), PRIMARY KEY (`Person ID`)); CREATE TABLE `Occupiants Info` (`Person ID` int, `First Name` varchar(maxSize), `Last Name` varchar(maxSize), Age int, `Phone Number` varchar(maxSize), `Current Home Address` varchar(maxSize), `Current Home City` varchar(maxSize), `Current Home LandLord's Phone Number` varchar(maxSize), `Current Home Duration` int, `Previous Home Address` varchar(maxSize), `Previous Home City` varchar(maxSize), `Previous Home LandLord's Phone Number` varchar(maxSize), `Previous Home Duration` int, `Current Employer` varchar(maxSize), `Current Employer's PhoneNumber` varchar(maxSize), `Current Job Duration` int, `Previous Employer` varchar(maxSize), `Previous Employer's Phone Number` varchar(maxSize), `Previous Job Duration` int, Occupation varchar(maxSize), `Income Monthly` double, `Income Yearly` double, Bank varchar(maxSize), Relationship varchar(maxSize)); CREATE TABLE Reference (`Person ID` int, `Reference's Name` varchar(maxSize), `Reference's Phone Number` varchar(maxSize), `Reference's Occupation` varchar(maxSize)); CREATE TABLE `Emergency Contacts` (`Person ID` int, `Emergency Name` varchar(maxSize), `Phone Number` varchar(maxSize)); CREATE TABLE `Parking Spots` (`Person ID` int, `Make Of Car` varchar(maxSize), Colour varchar(maxSize), Year int, `LIC of Car` varchar(maxSize), `Driver's LIC` varchar(maxSize), Amount double); CREATE TABLE Notes (`Person ID` int, Notes varchar(maxSize));"
 #define SQL "SELECT * FROM "
+#define obtainingIDSQL "SELECT * FROM apartment.Tenants ORDER BY `Person ID` DESC LIMIT 1"
 
 void function1() {
 
@@ -89,20 +90,20 @@ void function3() {
 	MYSQL * connection = estConnection(host, user, passwd, "Apartment", port, unix_socket,  client_flag);
 	int error = 0;
 
-	char * suite = (char*)malloc(sizeof(char));
+	char * suite = (char*)malloc(maxSize * sizeof(char));
 	int suiteNumber;
 
-	char * firstName = (char*)malloc(sizeof(char));
-	char * lastName = (char*)malloc(sizeof(char));
-	char * buildingAddress = (char*)malloc(sizeof(char));
-	char * injectionSQL = (char*)malloc(sizeof(char));
-	char * movedIN = (char*)malloc(sizeof(char));
+	char * firstName = (char*)malloc(maxSize * sizeof(char));
+	char * lastName = (char*)malloc(maxSize * sizeof(char));
+	char * buildingAddress = (char*)malloc(maxSize * sizeof(char));
+	char * injectionSQL = (char*)malloc(maxSize * sizeof(char));
+	char * movedIN = (char*)malloc(maxSize * sizeof(char));
 	char * CurrentlyLiving = "YES";
 
-	char * rentAmount = (char*)malloc(sizeof(char));
+	char * rentAmount = (char*)malloc(maxSize * sizeof(char));
 	double rentAmountNumber;
 
-	char * occupants = (char*)malloc(sizeof(char));
+	char * occupants = (char*)malloc(maxSize * sizeof(char));
 	int occupantNumber;
 
 
@@ -127,16 +128,12 @@ void function3() {
 			{
 				if ((strcmp(suite, "3A") == 0) || (strcmp(suite, "3a") == 0)){
 
-					suite = "4";
-					suiteNumber = atoi(suite);
 					error = 0;
 					break;
 				}
 
 				else if ((strcmp(suite, "12A") == 0) || (strcmp(suite, "12a") == 0))
 				{
-					suite = "13";
-					suiteNumber = atoi(suite);
 					error = 0;
 					break;
 				}
@@ -157,7 +154,7 @@ void function3() {
 
 	else {
 
-		suiteNumber = atoi(suite);
+		printf("%s", suite);
 	}
 
 }while(error == 1);
@@ -269,6 +266,14 @@ do{
 printf("\nWhen will the Tenant move in (MM/DD/YY): ");
 fgets(movedIN, maxSize, stdin);
 movedIN[strlen(movedIN)-1] = '\0';
+
+
+
+sprintf(injectionSQL, "INSERT INTO `apartment`.`Tenants` (`Suite`, `First Name`, `Last Name`, `Building Address`, `Rental Amount of Unit`, `Number of Occupants`, `Currently Living`, `Moved In`) VALUES ('%s', '%s', '%s', '%s', '%lf', '%d', '%s', '%s');", suite, firstName, lastName, buildingAddress, rentAmountNumber, occupantNumber, CurrentlyLiving, movedIN);
+executeSQL(connection, injectionSQL);
+
+
+obtainingID(connection, obtainingIDSQL);
 
 }
 

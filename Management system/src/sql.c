@@ -50,10 +50,10 @@ void print(MYSQL *mysql, char * searchTerm, int mode) {
 
 	char *token;
 	int counter = 0;
-	char * personID = (char*)malloc(255 * sizeof(char));
-	char * firstName = (char*)malloc(255 * sizeof(char));
-	char * lastName= (char*)malloc(255 * sizeof(char));
-	char * searchSQL = (char*)malloc(255 * sizeof(char));
+	char * personID = (char*)malloc(maxSize * sizeof(char));
+	char * firstName = (char*)malloc(maxSize * sizeof(char));
+	char * lastName= (char*)malloc(maxSize * sizeof(char));
+	char * searchSQL = (char*)malloc(maxSize * sizeof(char));
 if (mode == 0)
 {
 	token = strtok(searchTerm, " ");	
@@ -317,6 +317,30 @@ else if (mode == 1)
 	free(searchSQL);
 	mysql_free_result(result);
 }
+}
+
+int obtainingID(MYSQL *mysql, char *stmt_tr) {
+
+	executeSQL(mysql, stmt_tr);
+	char * personID = (char*)malloc(maxSize * sizeof(char));
+	MYSQL_RES *result = mysql_store_result(mysql);
+	MYSQL_FIELD *fields = mysql_fetch_fields(result);
+	MYSQL_ROW row;
+	int rows = mysql_num_fields(result);
+
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			if (strcmp(fields[i].name,"Person ID") == 0)
+			{
+				personID = row[i];
+			}	
+		}
+	}
+
+	
+
+	return atoi(personID);
 }
 
 

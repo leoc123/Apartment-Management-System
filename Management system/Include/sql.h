@@ -7,3 +7,4 @@ MYSQL * estConnection(const char *host, const char *user, const char *passwd, co
 void printDatabase(MYSQL *mysql);
 void executeSQL(MYSQL *mysql, const char *stmt_str);
 void print(MYSQL *mysql, char *searchTerm, int mode);
+int obtainingID(MYSQL *mysql, char *stmt_tr);
