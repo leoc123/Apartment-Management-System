@@ -648,6 +648,7 @@ if (parkingSpotNumber == 1)
 	char * amount = (char*)malloc(255 * sizeof(char));
 	double amountNumber;
 	char * parkingSpotSQL = (char*)malloc(400 * sizeof(char));
+	char *amountUpdateSQL = (char*)malloc(400 * sizeof (char));
 
 printf("\n---Parking Spots---");
 
@@ -734,7 +735,9 @@ else
 
 }while(error == 1);
 sprintf(parkingSpotSQL, "INSERT INTO `apartment`.`Parking Spots` (`Person ID`,`Make Of Car`, `Colour`, `Year`, `LIC of Car`, `Driver's LIC`, `Amount`, `Name`) VALUES ('%d','%s','%s','%s','%s','%s','%lf','%s');",personID,makeOfCar,colour,year,licOFCAR,driveLIC,amountNumber,name);
+sprintf(amountUpdateSQL, "UPDATE apartment.Tenants SET `Total Rent($)`='%lf' WHERE `Person ID` ='%d'", amountNumber+rentAmountNumber, personID);
 executeSQL(connection, parkingSpotSQL);
+executeSQL(connection, amountUpdateSQL);
 free(makeOfCar);
 free(colour);
 free(year);
@@ -743,7 +746,16 @@ free(driveLIC);
 free(amount);
 free(name);
 free(parkingSpotSQL);
+free(amountUpdateSQL);
 }while(strcmp(repeat, "1") == 0);
+}
+
+else
+{
+	char *amountUpdateSQL = (char*)malloc(400 * sizeof (char));
+	sprintf(amountUpdateSQL, "UPDATE apartment.Tenants SET `Total Rent($)`='%lf' WHERE `Person ID` ='%d'", rentAmountNumber, personID);
+	executeSQL(connection, amountUpdateSQL);
+	free(amountUpdateSQL);
 }
 
 
@@ -794,7 +806,6 @@ free(emergName);
 free(emergPhoneNumber);
 free(emergSQL);
 }while(strcmp(repeat, "1") == 0);
-
 
 
 
