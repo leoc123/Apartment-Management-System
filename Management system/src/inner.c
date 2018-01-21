@@ -89,45 +89,22 @@ void function3() {
 
 	MYSQL * connection = estConnection(host, user, passwd, "Apartment", port, unix_socket,  client_flag);
 	int error = 0;
-	int counter = 0;
 
 	char * suite = (char*)malloc(255 * sizeof(char));
 	int personID;
-	char * repeat = (char*)malloc(255 * sizeof(char));
-
+char * repeat = (char*)malloc(255 * sizeof(char));
 	char * firstName = (char*)malloc(255 * sizeof(char));
 	char * lastName = (char*)malloc(255 * sizeof(char));
 	char * buildingAddress = (char*)malloc(255 * sizeof(char));
 	char * injectionSQL = (char*)malloc(400 * sizeof(char));
-	char * occupantsSQL = (char*)malloc(1000 * sizeof(char));
+
+	
 	char * movedIN = (char*)malloc(255 * sizeof(char));
-	char * phoneNumber = (char*)malloc(255 * sizeof(char));
-	char * currentHomeAddress = (char*)malloc(255 * sizeof(char));
-	char * currentHomeCity = (char*)malloc(255 * sizeof(char));
-	char * currentHomeLandLordPhoneNumber = (char*)malloc(255 * sizeof(char));
-	char * currentHomeDuration = (char*)malloc(255 * sizeof(char));
-	char * previousHomeAddress = (char*)malloc(255 * sizeof(char));
-	char * previousHomeCity = (char*)malloc(255 * sizeof(char));
-	char * previousHomeLandLordPhoneNumber = (char*)malloc(255 * sizeof(char));
-	char * previousHomeDuration = (char*)malloc(255 * sizeof(char));
-	char * currentEmployer = (char*)malloc(255 * sizeof(char));
-	char * currentEmployerPhoneNumber = (char*)malloc(255 * sizeof(char));
-	char * currentJobDuration = (char*)malloc(255 * sizeof(char));
-	char * previousEmployer = (char*)malloc(255 * sizeof(char));
-	char * previousEmployerPhoneNumber = (char*)malloc(255 * sizeof(char));
-	char * previousJobDuration = (char*)malloc(255 * sizeof(char));
-	char * job = (char*)malloc(255 * sizeof(char));
-	char * bank = (char*)malloc(255 * sizeof(char));
-	char * relationship = (char*)malloc(255 * sizeof(char));
+	
 
-	char * incomeMonthly = (char*)malloc(255 * sizeof(char));
-	double incomeMonthlyNumber;
 
-	char * incomeYearly = (char*)malloc(255 * sizeof(char));
-	double incomeYearlyNumber;
+	
 
-	char * age = (char*)malloc(255 * sizeof(char));
-	int ageNumber;
 
 	char * parkingSpot = (char*)malloc(255 *sizeof(char));
 	int parkingSpotNumber;
@@ -140,8 +117,7 @@ void function3() {
 	char * occupants = (char*)malloc(255 * sizeof(char));
 	int occupantNumber;
 
-	char * firstName2 = (char*)malloc(255 * sizeof(char));
-	char * lastName2 = (char*)malloc(255 * sizeof(char));
+	
 
 	printf("---Tenants---\n");
 	do{
@@ -329,9 +305,49 @@ sprintf(injectionSQL, "INSERT INTO `apartment`.`Tenants` (`Suite`, `First Name`,
 
 executeSQL(connection, injectionSQL);
 personID = obtainingID(connection, obtainingIDSQL);
-
+free(suite);
+free(firstName);
+free(lastName);
+free(movedIN);
+free(rentAmount);
+free(occupants);
+free(injectionSQL);
 
 do{
+	repeat = (char*)malloc(255 * sizeof(char));
+	char * occupantsSQL = (char*)malloc(1000 * sizeof(char));
+	char * phoneNumber = (char*)malloc(255 * sizeof(char));
+	char * currentHomeAddress = (char*)malloc(255 * sizeof(char));
+	char * currentHomeCity = (char*)malloc(255 * sizeof(char));
+	char * currentHomeLandLordPhoneNumber = (char*)malloc(255 * sizeof(char));
+	char * currentHomeDuration = (char*)malloc(255 * sizeof(char));
+	char * previousHomeAddress = (char*)malloc(255 * sizeof(char));
+	char * previousHomeCity = (char*)malloc(255 * sizeof(char));
+	char * previousHomeLandLordPhoneNumber = (char*)malloc(255 * sizeof(char));
+	char * previousHomeDuration = (char*)malloc(255 * sizeof(char));
+	char * currentEmployer = (char*)malloc(255 * sizeof(char));
+	char * currentEmployerPhoneNumber = (char*)malloc(255 * sizeof(char));
+	char * currentJobDuration = (char*)malloc(255 * sizeof(char));
+	char * previousEmployer = (char*)malloc(255 * sizeof(char));
+	char * previousEmployerPhoneNumber = (char*)malloc(255 * sizeof(char));
+	char * previousJobDuration = (char*)malloc(255 * sizeof(char));
+	char * job = (char*)malloc(255 * sizeof(char));
+	char * bank = (char*)malloc(255 * sizeof(char));
+	char * relationship = (char*)malloc(255 * sizeof(char));
+
+	char * incomeMonthly = (char*)malloc(255 * sizeof(char));
+	double incomeMonthlyNumber;
+
+	char * incomeYearly = (char*)malloc(255 * sizeof(char));
+	double incomeYearlyNumber;
+
+	char * age = (char*)malloc(255 * sizeof(char));
+	int ageNumber;
+
+	char * firstName2 = (char*)malloc(255 * sizeof(char));
+	char * lastName2 = (char*)malloc(255 * sizeof(char));
+
+
 printf("\n---Occupiants Info---");
 printf("\nEnter First Name: ");
 fgets(firstName2, 255, stdin);
@@ -537,12 +553,88 @@ else
 }
 
 }while(error == 1);
-
 sprintf(occupantsSQL, "INSERT INTO `apartment`.`Occupiants Info` (`Person ID`,`First Name`, `Last Name`, `Age`, `Phone Number`, `Current Home Address`, `Current Home City`, `Current Home LandLord's Phone Number`, `Current Home Duration`, `Previous Home Address`, `Previous Home City`, `Previous Home LandLord's Phone Number`, `Previous Home Duration`, `Current Employer`, `Current Employer's PhoneNumber`, `Current Job Duration`, `Previous Employer`, `Previous Employer's Phone Number`, `Previous Job Duration`, `Occupation`, `Income Monthly`, `Income Yearly`, `Bank`, `Relationship`) VALUES ('%d','%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s', '%s', '%s', '%s', '%s', '%lf', '%lf', '%s','%s');",personID, firstName2,lastName2,ageNumber,phoneNumber,currentHomeAddress,currentHomeCity,currentHomeLandLordPhoneNumber,currentHomeDuration,previousHomeAddress,previousHomeCity,previousHomeLandLordPhoneNumber,previousHomeDuration,currentEmployer,currentEmployerPhoneNumber,currentJobDuration,previousEmployer,previousEmployerPhoneNumber,previousJobDuration,job,incomeMonthlyNumber,incomeYearlyNumber,bank,relationship);
-
+executeSQL(connection,occupantsSQL);
+free(firstName2);
+free(lastName2);
+free(age);
+free(phoneNumber);
+free(currentHomeAddress);
+free(currentHomeLandLordPhoneNumber);
+free(currentHomeCity);
+free(currentHomeDuration);
+free(previousHomeAddress);
+free(previousHomeCity);
+free(previousHomeLandLordPhoneNumber);
+free(previousHomeDuration);
+free(currentEmployer);
+free(currentEmployerPhoneNumber);
+free(currentJobDuration);
+free(previousEmployer);
+free(previousEmployerPhoneNumber);
+free(previousJobDuration);
+free(job);
+free(incomeMonthly);
+free(incomeYearly);
+free(bank);
+free(relationship);
+free(occupantsSQL);
 }while(strcmp(repeat, "1") == 0);
 
-executeSQL(connection,occupantsSQL);
+do{
+	repeat = (char*)malloc(255 * sizeof(char));
+	char * referenceName = (char*)malloc(255 * sizeof(char));
+	char * referencePhoneNumber = (char*)malloc(255 * sizeof(char));
+	char * referenceJob = (char*)malloc(255 * sizeof(char));
+	char * referenceSQL = (char*)malloc(400 * sizeof(char));
+
+printf("\n---References---");
+
+printf("\nEnter Reference's Name: ");
+fgets(referenceName, 255, stdin);
+referenceName[strlen(referenceName)-1] = '\0';
+
+printf("\nEnter Reference's Phone Number (XXX)-(XXX)-(XXXX): ");
+fgets(referencePhoneNumber, 255, stdin);
+referencePhoneNumber[strlen(referencePhoneNumber)-1] = '\0';
+
+printf("\nEnter Reference's Occupation: ");
+fgets(referenceJob, 255, stdin);
+referenceJob[strlen(referenceJob)-1] = '\0';
+
+do {
+	error = 0;
+printf("\nInsert Another Entry?\n");
+printf("YES (1) OR NO (2): ");
+fgets(repeat, 255, stdin);
+repeat[strlen(repeat)-1] = '\0';
+
+if ((strlen(repeat) <= 0) || atoi(repeat) >= 3 || atoi(repeat) == 0 || strlen(repeat) > 1) {
+	error = 1;
+}
+
+else
+{
+	error = 0;
+	if (strcmp(repeat, "1") == 0) {
+		repeat = "1";
+	}
+
+	else
+	{
+		repeat = "0";
+	}
+}
+
+}while(error == 1);
+sprintf(referenceSQL, "INSERT INTO `apartment`.`reference` (`Person ID`,`Reference's Name`, `Reference's Phone Number`, `Reference's Occupation`) VALUES ('%d','%s','%s','%s');",personID,referenceName,referencePhoneNumber,referenceJob);
+executeSQL(connection, referenceSQL);
+free(referenceName);
+free(referencePhoneNumber);
+free(referenceJob);
+free(referenceSQL);
+}while(strcmp(repeat, "1") == 0);
+
 
 
 
