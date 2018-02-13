@@ -8,3 +8,5 @@ void printDatabase(MYSQL *mysql);
 void executeSQL(MYSQL *mysql, const char *stmt_str);
 void print(MYSQL *mysql, char *searchTerm, int mode);
 int obtainingID(MYSQL *mysql, char *stmt_tr);
+struct rentRoll * print2(MYSQL *mysql, char *searchTerm, int mode);
+void slection(MYSQL *mysql);

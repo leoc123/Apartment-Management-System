@@ -8,7 +8,7 @@
 #define unix_socket NULL
 #define client_flag CLIENT_MULTI_STATEMENTS
 #define createSQL "CREATE DATABASE "
-#define initateSQL "CREATE TABLE Tenants (`Person ID` int AUTO_INCREMENT, Suite varchar(255), `First Name` varchar(255), `Last Name` varchar(255), `Building Address` varchar(255), `Rental Amount of Unit($)` double, `Number of Occupants` int, `Occupied`  int, `Moved In` varchar(255), `Moved Out` varchar(255), `Rent Increase(%)` double, `Total Rent($)` double, `Own a parking Spot` int,  PRIMARY KEY (`Person ID`)); CREATE TABLE `Occupiants Info` (`Person ID` int, `First Name` varchar(255), `Last Name` varchar(255), Age int, `Phone Number` varchar(255), `Current Home Address` varchar(255), `Current Home City` varchar(255), `Current Home LandLord's Phone Number` varchar(255), `Current Home Duration` varchar(255), `Previous Home Address` varchar(255), `Previous Home City` varchar(255), `Previous Home LandLord's Phone Number` varchar(255), `Previous Home Duration` varchar(255), `Current Employer` varchar(255), `Current Employer's PhoneNumber` varchar(255), `Current Job Duration` varchar(255), `Previous Employer` varchar(255), `Previous Employer's Phone Number` varchar(255), `Previous Job Duration` varchar(255), Occupation varchar(255), `Income Monthly` double, `Income Yearly` double, Bank varchar(255), Relationship varchar(255)); CREATE TABLE Reference (`Person ID` int, `Reference's Name` varchar(255), `Reference's Phone Number` varchar(255), `Reference's Occupation` varchar(255)); CREATE TABLE `Emergency Contacts` (`Person ID` int, `Emergency Name` varchar(255), `Phone Number` varchar(255)); CREATE TABLE `Parking Spots` (`Person ID` int, `Make Of Car` varchar(255), Colour varchar(255), Year int, `LIC of Car` varchar(255), `Driver's LIC` varchar(255), Amount double, Name varchar(255)); CREATE TABLE Notes (`Person ID` int, Notes varchar(255));"
+#define initateSQL "CREATE TABLE Tenants (`Person ID` int AUTO_INCREMENT, Suite varchar(255), `First Name` varchar(255), `Last Name` varchar(255), `Building Address` varchar(255), `Rental Amount of Unit($)` double, `Number of Occupants` int, `Occupied`  int, `Moved In` varchar(255), `Moved Out` varchar(255), `Rent Increase(%)` double, `Total Rent($)` double, `Own a parking Spot` int, `Parking Spot Amount ($)` double,`Set Rent ($)` double,  PRIMARY KEY (`Person ID`)); CREATE TABLE `Occupiants Info` (`Person ID` int, `First Name` varchar(255), `Last Name` varchar(255), Age int, `Phone Number` varchar(255), `Current Home Address` varchar(255), `Current Home City` varchar(255), `Current Home LandLord's Phone Number` varchar(255), `Current Home Duration` varchar(255), `Previous Home Address` varchar(255), `Previous Home City` varchar(255), `Previous Home LandLord's Phone Number` varchar(255), `Previous Home Duration` varchar(255), `Current Employer` varchar(255), `Current Employer's PhoneNumber` varchar(255), `Current Job Duration` varchar(255), `Previous Employer` varchar(255), `Previous Employer's Phone Number` varchar(255), `Previous Job Duration` varchar(255), Occupation varchar(255), `Income Monthly` double, `Income Yearly` double, Bank varchar(255), Relationship varchar(255)); CREATE TABLE Reference (`Person ID` int, `Reference's Name` varchar(255), `Reference's Phone Number` varchar(255), `Reference's Occupation` varchar(255)); CREATE TABLE `Emergency Contacts` (`Person ID` int, `Emergency Name` varchar(255), `Phone Number` varchar(255)); CREATE TABLE `Parking Spots` (`Person ID` int, `Make Of Car` varchar(255), Colour varchar(255), Year int, `LIC of Car` varchar(255), `Driver's LIC` varchar(255), Amount double, Name varchar(255)); CREATE TABLE Notes (`Person ID` int, Notes varchar(255)); CREATE TABLE `Rent Tracker` (`Person ID` int, `Month` varchar(255), `Rent Amount` double, `Rent Paid` double, `Remaining Amount` double); CREATE TABLE `Rent Roll` (`Person ID` int, `Rent Amount` double, `Rent Increase (%)` double, `Total` double, `Month` varchar(255));"
 #define SQL "SELECT * FROM "
 #define obtainingIDSQL "SELECT * FROM apartment.Tenants ORDER BY `Person ID` DESC LIMIT 1"
 
@@ -41,7 +41,7 @@ void function1() {
 
 void function2() {
 
-	char * userInput = "Testing";
+	char * userInput = (char*)malloc(255 * sizeof(char));
 	char * fullName = (char*)malloc(255 * sizeof(char));
 	
 
@@ -97,7 +97,7 @@ char * repeat = (char*)malloc(255 * sizeof(char));
 	char * lastName = (char*)malloc(255 * sizeof(char));
 	char * buildingAddress = (char*)malloc(255 * sizeof(char));
 	char * injectionSQL = (char*)malloc(400 * sizeof(char));
-
+	
 	
 	char * movedIN = (char*)malloc(255 * sizeof(char));
 	
@@ -301,10 +301,11 @@ else
 
 }while(error == 1);
 
-sprintf(injectionSQL, "INSERT INTO `apartment`.`Tenants` (`Suite`, `First Name`, `Last Name`, `Building Address`, `Rental Amount of Unit($)`, `Number of Occupants`, `Occupied`, `Moved In`, `Own a parking Spot`) VALUES ('%s', '%s', '%s', '%s', '%lf', '%d', '%d', '%s', '%d');", suite, firstName, lastName, buildingAddress, rentAmountNumber, occupantNumber, CurrentlyLiving, movedIN, parkingSpotNumber);
-
+sprintf(injectionSQL, "INSERT INTO `apartment`.`Tenants` (`Suite`, `First Name`, `Last Name`, `Building Address`, `Rental Amount of Unit($)`, `Number of Occupants`, `Occupied`, `Moved In`, `Own a parking Spot`, `Set Rent ($)`) VALUES ('%s', '%s', '%s', '%s', '%lf', '%d', '%d', '%s', '%d', %lf);", suite, firstName, lastName, buildingAddress, rentAmountNumber, occupantNumber, CurrentlyLiving, movedIN, parkingSpotNumber, rentAmountNumber);
 executeSQL(connection, injectionSQL);
 personID = obtainingID(connection, obtainingIDSQL);
+
+
 free(suite);
 free(firstName);
 free(lastName);
@@ -735,7 +736,7 @@ else
 
 }while(error == 1);
 sprintf(parkingSpotSQL, "INSERT INTO `apartment`.`Parking Spots` (`Person ID`,`Make Of Car`, `Colour`, `Year`, `LIC of Car`, `Driver's LIC`, `Amount`, `Name`) VALUES ('%d','%s','%s','%s','%s','%s','%lf','%s');",personID,makeOfCar,colour,year,licOFCAR,driveLIC,amountNumber,name);
-sprintf(amountUpdateSQL, "UPDATE apartment.Tenants SET `Total Rent($)`='%lf' WHERE `Person ID` ='%d'", amountNumber+rentAmountNumber, personID);
+sprintf(amountUpdateSQL, "UPDATE apartment.Tenants SET `Total Rent($)`='%lf' WHERE `Person ID` ='%d'; UPDATE apartment.Tenants SET `Parking Spot Amount ($)`='%lf' WHERE `Person ID` ='%d';", amountNumber+rentAmountNumber, personID, amountNumber, personID);
 executeSQL(connection, parkingSpotSQL);
 executeSQL(connection, amountUpdateSQL);
 free(makeOfCar);
@@ -808,12 +809,153 @@ free(emergSQL);
 }while(strcmp(repeat, "1") == 0);
 
 
+}
+
+void function4()
+{
+	MYSQL * connection = estConnection(host, user, passwd, "Apartment", port, unix_socket,  client_flag);
+	executeSQL(connection, "SHOW TABLES FROM Apartment;");
+
+	MYSQL_RES *result = mysql_store_result(connection);
+	struct rentRoll * p;
+	MYSQL_ROW row;
+	int rows = mysql_num_fields(result);
+	char * userInput = (char*)malloc(400*sizeof(char));
+	char * userInput2 = (char*)malloc(400*sizeof(char));
+	char * fullName = (char*)malloc(255 * sizeof(char));
+	char * dec = (char*)malloc(255 * sizeof(char));
+	char * searchSQL = (char*)malloc(500 * sizeof(char));
+	char * rentIncrease = (char*)malloc(255 * sizeof(char));
+	char * month = (char*)malloc(255 * sizeof(char));
+	char * updateSQL = (char*)malloc(500 * sizeof(char));
+	
+
+
+	printf("\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("-%s\n",row[i]);
+		}
+	}
+		printf("Which would you like to edit: ");
+	fgets(userInput2, 255, stdin);
+	userInput2[strlen(userInput2)-1] = '\0';
+
+	if ((strcmp(userInput2, "Emergency Contacts") == 0) || (strcmp(userInput2, "emergency contacts") == 0)){
+
+	}
+
+	else if ((strcmp(userInput2, "Notes") == 0) || (strcmp(userInput2, "notes") == 0)){
+
+	}
+
+	else if ((strcmp(userInput2, "Occupiants Info") == 0) || (strcmp(userInput2, "occupiants info") == 0)){
+
+	}
+
+	else if ((strcmp(userInput2, "Parking Spots") == 0) || (strcmp(userInput2, "parking spots") == 0)){
+
+	}
+	else if ((strcmp(userInput2, "Reference") == 0) || (strcmp(userInput2, "reference") == 0)){
+
+	}
+	else if ((strcmp(userInput2, "Rent Tracker") == 0) || (strcmp(userInput2, "rent tracker") == 0)){
+
+	}
+	else if ((strcmp(userInput2, "tenant") == 0) || (strcmp(userInput2, "Tenants") == 0)){
+
+	}
+
+	else if ((strcmp(userInput2, "Rent Roll") == 0) || (strcmp(userInput2, "rent roll") == 0)){
+
+
+
+	while ((strcmp(userInput, "name") != 0) && (strcmp(userInput, "suite") != 0) && (strcmp(userInput, "Name") != 0) && (strcmp(userInput, "Suite") != 0))  {
+		
+
+		printf("Enter Name or Suite: ");
+
+		fgets(userInput, 255, stdin);
+		userInput[strlen(userInput)-1] = '\0';
+
+		if ((strcmp(userInput, "name") != 0) && (strcmp(userInput, "suite") != 0) && (strcmp(userInput, "Name") != 0) && (strcmp(userInput, "Suite") != 0))
+		{
+			printf("Invalid Input\n");
+		}
+	}
+
+	if ((strcmp(userInput, "name") == 0) || (strcmp(userInput, "Name")) == 0) {
+
+		MYSQL * connection = estConnection(host, user, passwd, "Apartment", port, unix_socket,  client_flag);
+
+		printf("\nEnter Full Name: ");
+		fgets(fullName, 255, stdin);
+		fullName[strlen(fullName)-1] = '\0';
+
+		p = print2(connection, fullName, 0);
+	}
+
+	else if ((strcmp(userInput, "suite") == 0) || (strcmp(userInput, "Suite")) == 0) {
+
+		MYSQL * connection = estConnection(host, user, passwd, "Apartment", port, unix_socket,  client_flag);
+
+		printf("\nEnter Suite Number: ");
+		fgets(fullName, 255, stdin);
+		fullName[strlen(fullName)-1] = '\0';
+
+		p =print2(connection, fullName, 1);
+	}
+
+	printf("Will you be Adding or Updating: ");
+	fgets(dec, 255, stdin);
+	dec[strlen(dec)-1] = '\0';	
+
+	if (strcmp(dec, "adding") == 0)
+	{
+
+	printf("Enter Rent Increase Amount: ");
+	fgets(rentIncrease, 255, stdin);
+	rentIncrease[strlen(rentIncrease)-1] = '\0';	
+
+	printf("\nEnter Month (MM/DD/YY): ");
+	fgets(month, 255, stdin);
+	month[strlen(month)-1] = '\0';	
+
+	
+	
+	sprintf(searchSQL, "INSERT INTO apartment.`Rent Roll` (`Person ID`, `Rent Amount`, `Rent Increase (%%)`, `Total`,`Month`)VALUES (%s, %s, %s, %lf, '%s')", p->personID, p->rentAmount,rentIncrease, (atof(p->rentAmount)*((atof(rentIncrease))/100.0))+atof(p->rentAmount), month);
+
+	executeSQL(connection, searchSQL);
+
+	sprintf(updateSQL,"UPDATE apartment.Tenants SET `Total Rent($)`='%f' WHERE `Person ID` ='%s'; UPDATE apartment.Tenants SET `Rent Increase(%%)`='%s' WHERE `Person ID` ='%s'; UPDATE apartment.Tenants SET `Set Rent ($)`='%f' WHERE `Person ID` ='%s';", (atof(p->rentAmount)*((atof(rentIncrease))/100.0))+atof(p->rentAmount)+atof(p->parkingSpotAmount), p->personID, rentIncrease, p->personID, (atof(p->rentAmount)*((atof(rentIncrease))/100.0))+atof(p->rentAmount), p->personID);
+	executeSQL(connection, updateSQL);
+
+	}
+
+	else if(strcmp (dec, "updating") == 0){
+
+	}
+
+	else
+	{
+		printf("Invalid Input");
+	}
 
 
 
 
+
+	}
+
+	else
+	{
+		printf("Invalid Input");
+	}
 
 
 }
+
+
 
 

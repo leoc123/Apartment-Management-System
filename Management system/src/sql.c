@@ -46,6 +46,8 @@ void executeSQL(MYSQL *mysql, const char *stmt_str)
 	}
 }
 
+
+
 void print(MYSQL *mysql, char * searchTerm, int mode) {
 
 	char *token;
@@ -187,6 +189,22 @@ if (mode == 0)
 		printf("\n");
 	}
 
+	sprintf(searchSQL, "SELECT * FROM apartment.`Rent Tracker` WHERE `Person ID` LIKE '%%%s%%'", personID);
+	executeSQL(mysql, searchSQL);
+	result = mysql_store_result(mysql);
+	fields = mysql_fetch_fields(result);
+
+	rows = mysql_num_fields(result);
+
+	printf("-----Rent Tracker-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("%s: %s\n", fields[i].name, row[i]);
+		}
+		printf("\n");
+	}
+
 	free(firstName);
 	free(lastName);
 	free(personID);
@@ -311,12 +329,152 @@ else if (mode == 1)
 		printf("\n");
 	}
 
+	sprintf(searchSQL, "SELECT * FROM apartment.`Rent Tracker` WHERE `Person ID` LIKE '%%%s%%'", personID);
+	executeSQL(mysql, searchSQL);
+	result = mysql_store_result(mysql);
+	fields = mysql_fetch_fields(result);
+
+	rows = mysql_num_fields(result);
+
+	printf("-----Rent Tracker-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("%s: %s\n", fields[i].name, row[i]);
+		}
+		printf("\n");
+	}
+
 	free(firstName);
 	free(lastName);
 	free(personID);
 	free(searchSQL);
 	mysql_free_result(result);
 }
+}
+
+struct rentRoll * print2(MYSQL *mysql, char * searchTerm, int mode) {
+	struct rentRoll *t = (struct rentRoll *)malloc(255 * sizeof(struct rentRoll));
+	char *token;
+	int counter = 0;
+	char * personID = (char*)malloc(maxSize * sizeof(char));
+	char * firstName = (char*)malloc(maxSize * sizeof(char));
+	char * lastName= (char*)malloc(maxSize * sizeof(char));
+	char * searchSQL = (char*)malloc(maxSize * sizeof(char));
+if (mode == 0)
+{
+	token = strtok(searchTerm, " ");	
+
+	while (token != NULL)
+	{
+		if (counter == 0)
+		{
+			strcpy(firstName, token);
+		}
+
+		else if(counter == 1)
+		{
+			strcpy(lastName, token);
+		}
+		counter++;
+		token = strtok(NULL, " ");
+	}
+	printf("\n");
+	sprintf(searchSQL, "SELECT * FROM apartment.tenants WHERE `First Name` LIKE '%%%s%%' AND `Last Name` LIKE '%%%s%%'", firstName, lastName);
+
+	executeSQL(mysql, searchSQL);
+
+	MYSQL_RES *result = mysql_store_result(mysql);
+	MYSQL_FIELD *fields = mysql_fetch_fields(result);
+	MYSQL_ROW row;
+	int rows = mysql_num_fields(result);
+
+	printf("-----Tenant(s)-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			if (strcmp(fields[i].name, "Person ID") == 0)
+			{
+				t->personID = (char*)malloc(255 * sizeof(char));
+				strcpy(t->personID, row[i]); 
+			}
+
+			else if (strcmp(fields[i].name, "Set Rent ($)") == 0)
+			{
+				t->rentAmount = (char*)malloc(255 * sizeof(char));
+				strcpy(t->rentAmount, row[i]);
+			}
+
+			else if (strcmp(fields[i].name, "Parking Spot Amount ($)") == 0)
+			{
+				t->parkingSpotAmount = (char*)malloc(255 * sizeof(char));
+				strcpy(t->parkingSpotAmount, row[i]);
+			}
+
+			printf("%s: %s\n", fields[i].name, row[i]);
+			counter++;
+		}
+		printf("\n");
+	}
+
+	
+	if (counter <= 1)
+	{
+		printf("Couldn't Find Anything with the name: '%s %s'",firstName, lastName);
+		return t;
+	}
+
+	else 
+	{
+		printf("Enter the person ID: ");
+		fgets(personID, maxSize, stdin);
+		personID[strlen(personID)-1] = '\0';
+		printf("\n");
+	}
+
+	
+}
+
+else if (mode == 1)
+{
+	printf("\n");
+	sprintf(searchSQL, "SELECT * FROM apartment.tenants WHERE Suite LIKE '%%%s%%'", searchTerm);
+
+	executeSQL(mysql, searchSQL);
+
+	MYSQL_RES *result = mysql_store_result(mysql);
+	MYSQL_FIELD *fields = mysql_fetch_fields(result);
+	MYSQL_ROW row;
+	int rows = mysql_num_fields(result);
+
+	printf("-----Tenant(s)-----\n");
+	while((row = mysql_fetch_row(result))){
+		for (int i = 0; i < rows; i++)
+		{
+			printf("%s: %s\n", fields[i].name, row[i]);
+			counter++;
+		}
+		printf("\n");
+	}
+
+	
+	if (counter <= 1)
+	{
+		printf("Couldn't Find Anything with the Suite Number: '%s'",searchTerm);
+		return t;
+	}
+
+	else 
+	{
+		printf("Enter the person ID: ");
+		fgets(personID, maxSize, stdin);
+		personID[strlen(personID)-1] = '\0';
+		printf("\n");
+	}
+
+	
+}
+	return t;
 }
 
 int obtainingID(MYSQL *mysql, char *stmt_tr) {
@@ -342,5 +500,6 @@ int obtainingID(MYSQL *mysql, char *stmt_tr) {
 
 	return atoi(personID);
 }
+
 
 
