@@ -928,7 +928,7 @@ void function4()
 
 	executeSQL(connection, searchSQL);
 
-	sprintf(updateSQL,"UPDATE apartment.Tenants SET `Total Rent($)`='%f' WHERE `Person ID` ='%s'; UPDATE apartment.Tenants SET `Rent Increase(%%)`='%s' WHERE `Person ID` ='%s'; UPDATE apartment.Tenants SET `Set Rent ($)`='%f' WHERE `Person ID` ='%s';", (atof(p->rentAmount)*((atof(rentIncrease))/100.0))+atof(p->rentAmount)+atof(p->parkingSpotAmount), p->personID, rentIncrease, p->personID, (atof(p->rentAmount)*((atof(rentIncrease))/100.0))+atof(p->rentAmount), p->personID);
+	sprintf(updateSQL,"UPDATE apartment.Tenants SET `Total Rent($)`='%f' WHERE `Person ID` ='%s'; UPDATE apartment.Tenants SET `Rent Increase(%%)`='%s' WHERE `Person ID` ='%s'; UPDATE apartment.Tenants SET `Set Rent ($)`='%.2f' WHERE `Person ID` ='%s';", (atof(p->rentAmount)*((atof(rentIncrease))/100.0))+atof(p->rentAmount)+atof(p->parkingSpotAmount), p->personID, rentIncrease, p->personID, (atof(p->rentAmount)*((atof(rentIncrease))/100.0))+atof(p->rentAmount), p->personID);
 	executeSQL(connection, updateSQL);
 
 	}
