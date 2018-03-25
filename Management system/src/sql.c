@@ -424,6 +424,7 @@ if (mode == 0)
 		return t;
 	}
 
+
 	else 
 	{
 		printf("Enter the person ID: ");

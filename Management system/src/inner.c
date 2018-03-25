@@ -135,7 +135,7 @@ char * repeat = (char*)malloc(255 * sizeof(char));
 	else
 	{
 		for (int i = 0; i < strlen(suite); i++){
-		if ((isdigit(suite[i]) == 0) || (atoi(suite) == 0) || (atoi(suite) == 13) || (atoi(suite) == 4))
+		if ((isdigit(suite[i]) == 0) || (atoi(suite) == 0) || (atoi(suite) == 13))
 		{
 			if ((strcmp(suite, "3A") == 0) || (strcmp(suite, "3a") == 0) || (strcmp(suite, "12a") == 0) || (strcmp(suite, "12A") == 0))
 			{
@@ -217,7 +217,7 @@ else
 	else
 	{
 		for (int i = 0; i < strlen(rentAmount); i++){
-		if ((isdigit(rentAmount[i]) == 0) || (atoi(rentAmount) == 0))
+		if (((isdigit(rentAmount[i]) == 0) && (rentAmount[i] != '.'))  || (atoi(rentAmount) == 0))
 		{
 				error = 1;
 				break;
